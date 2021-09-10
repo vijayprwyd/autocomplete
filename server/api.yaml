@@ -1,0 +1,196 @@
+openapi: 3.0.0
+
+info:
+  title: Country list API
+  version: 0.0.1
+  contact:
+    name: Contiamo
+    email: info@contiamo.com
+servers:
+  - url: http://localhost:3001
+    description: Local development server  
+paths:
+  "/":
+    get:
+      summary: Get countries
+      description: Get a list of countries
+      operationId: GetCountries
+      parameters:
+        - in: query
+          name: q
+          description: Search string to filter to matching countries only
+          schema:
+            type: string             
+        - in: query
+          name: page
+          description: Page number
+          schema:
+            type: number
+        - in: query
+          name: pageSize
+          description: Number of records per page
+          schema:
+            type: number
+        - in: query
+          name: latency
+          description: Adds a delay of x milliseconds to the response
+          schema:
+            type: number
+        - in: query
+          name: monkey
+          description: If set, will return a 500 error with a 50% probability
+          schema:
+            type: string          
+      responses:
+        "200":
+          $ref: "#/components/responses/Countries"          
+        "422":
+          $ref: "#/components/responses/ValidationError"                
+        "500":
+          $ref: "#/components/responses/ServerError"
+components:
+  schemas:
+    Country:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        iso3:
+          type: string
+        iso2:
+          type: string
+        phone_code:
+          type: string
+        capital:
+          type: string
+        currency:
+          type: string
+        currency_symbol:
+          type: string
+        tld:
+          type: string
+        native:
+          type: string
+          nullable: true
+        region:
+          type: string
+        subregion:
+          type: string
+        timezones:
+          type: array
+          items:
+            type: object
+            properties:
+              zoneName:
+                type: string
+              gmtOffset:
+                type: number
+              gmtOffsetName:
+                type: string
+              abbreviation:
+                type: string
+              tzName:
+                type: string
+            required:
+              - zoneName
+              - gmtOffset
+              - gmtOffsetName
+              - abbreviation
+              - tzName
+        translations:
+          type: object
+          nullable: true
+          properties:
+            br:
+              type: string
+            pt:
+              type: string 
+            nl:
+              type: string 
+            hr:
+              type: string 
+            fa:
+              type: string 
+            de:
+              type: string 
+            es:
+              type: string 
+            fr:
+              type: string 
+            ja:
+              type: string 
+            it:
+              type: string
+          required:
+            - br
+            - pt
+            - nl
+            - hr
+            - fa
+            - de
+            - es
+            - fr
+            - ja
+            - it
+        latitude:
+          type: string
+        longitude:
+          type: string
+        emoji:
+          type: string
+        emojiU:
+          type: string    
+      required:
+        - id
+        - name
+        - iso3
+        - iso2
+        - phone_code
+        - capital
+        - currency
+        - currency_symbol
+        - tld
+        - native
+        - region
+        - subregion
+        - timezones
+        - translations
+        - latitude
+        - longitude
+        - emoji
+        - emojiU
+    GeneralError:
+      type: object
+      properties:
+        error:
+          type: string
+  responses:
+    Countries:
+      description: Country list response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Country"
+            required:
+              - data
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GeneralError"
+    ServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GeneralError"              
+      
+                                
