@@ -1,6 +1,5 @@
 # Autocomplete Library
 
-Please implement a React component that renders a text input field with autocompletion functionality and integrate it with a server endpoint to retrieve options.
 
 ## UI
 
